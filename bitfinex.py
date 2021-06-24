@@ -6,7 +6,7 @@ import json
 
 bfx = BfxRest(None, None)
 
-
+# gets a snapshot from the orders list of the given pair
 async def get_one_pair_snapshot(sym) -> dict:
     pair_snapshot: dict = {'symbol': sym}
     get_books_time = time.time() * 1000.0
@@ -15,7 +15,7 @@ async def get_one_pair_snapshot(sym) -> dict:
     pair_snapshot.update({'books_list': books_list})
     return pair_snapshot
 
-
+# gets a list of available pairs in bitfinex
 async def get_pair_list():
     list_of_pairs = []
     try:
@@ -41,7 +41,7 @@ async def get_pair_list():
             json.dump(list_of_pairs, output, indent=2)
     return list_of_pairs
 
-
+# gets snapshots orders lists of all pairs in the list 
 async def get_snapshots():
     list_of_pairs = await get_pair_list()
     list_of_snapshots = []
@@ -65,14 +65,14 @@ async def get_snapshots():
 
     return list_of_snapshots
 
-
+# get the trades history of the given pair in the given time
 async def get_one_pair_trades(sym, start, end, limit=100) -> dict:
     pair_trades: dict = {'symbol': sym, 'start_time': start, 'end_time': end}
     trades_list = await bfx.get_public_trades(symbol=sym,start=start,end=end,limit=limit)
     pair_trades.update({'trades_list': trades_list})
     return pair_trades
 
-
+# get the trades history of all pairs in the list
 async def get_trades(start, end=time.time()*1000.0):
     list_of_pairs = await get_pair_list()
     list_of_pairs_trades = []
